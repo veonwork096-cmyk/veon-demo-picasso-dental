@@ -1,0 +1,100 @@
+---
+import Icon from "./Icon.astro";
+import { clinic, messengers } from "../data/clinic";
+const h1 = "Імплантація та вініри в Ужгороді з ціною до початку лікування";
+---
+<section id="hero" class="hero field-stone" data-rec="UX-R003,SEO-R005" aria-labelledby="hero-title">
+  <div class="container hero__inner">
+    <h1 id="hero-title" class="hero__title">{h1}</h1>
+    <div class="hero__rule" aria-hidden="true"></div>
+    <div class="hero__band">
+      <p class="hero__lead">Цифрова діагностика, план і фінальний бюджет — до першого етапу лікування.</p>
+      <div class="hero__call">
+        <a class="btn btn--light hero__btn" href={clinic.phoneMain.href}>
+          <Icon name="phone" />Подзвонити
+        </a>
+        <a class="hero__number num" href={clinic.phoneMain.href} aria-label={`Номер для запису ${clinic.phoneMain.label}`}>{clinic.phoneMain.label}</a>
+      </div>
+      <div class="hero__write">
+        <button class="btn btn--ghost-light hero__btn hero__write-toggle" type="button" popovertarget="write-sheet">
+          <Icon name="chat" />Написати
+        </button>
+        <p class="hero__caption" id="hero-write">Або напишіть на той самий номер</p>
+        <ul class="hero__messengers" aria-labelledby="hero-write">
+          {messengers.map((m) => (
+            <li><a class="hero__msg" href={m.href}><Icon name={m.id} />{m.name}</a></li>
+          ))}
+        </ul>
+      </div>
+    </div>
+    <ul class="hero__trust" aria-label="Коротко про клініку">
+      <li>{clinic.licenseShort}</li>
+      <li class="hero__reviews"><a class="link link-icon" href={clinic.mapsUrl} rel="noopener" target="_blank">Відгуки пацієнтів у Google <Icon name="external" size={16} /></a></li>
+      <li>{clinic.hoursFull}</li>
+      <li>{clinic.building}</li>
+    </ul>
+  </div>
+</section>
+
+<style>
+  .hero { padding-top: calc(var(--header-h) + clamp(2rem, 6vw, 7rem)); padding-bottom: clamp(2.5rem, 6vw, 6.5rem); }
+  .hero__inner { display: grid; grid-template-columns: minmax(0, 1fr); }
+  .hero__title { font-size: var(--fs-display); line-height: 1.04; max-width: 15.5ch; overflow-wrap: break-word; min-width: 0; text-wrap: balance; }
+  .hero__rule { height: 1px; margin-block: clamp(1.5rem, 3.5vw, 3rem); background: var(--border-on-stone); transform-origin: left center; }
+  .hero__band { display: grid; gap: .75rem; align-items: start; }
+  .hero__lead { margin-bottom: .75rem; }
+  @media (min-width: 768px) { .hero__band { gap: var(--s3); } .hero__lead { margin-bottom: 0; } }
+  .hero__lead { font-size: var(--fs-body-l); line-height: 1.45; max-width: 34ch; color: var(--porcelain); }
+  .hero__call, .hero__write { display: grid; gap: .75rem; align-content: start; }
+  .hero__btn { width: 100%; }
+  .hero__number { display: none; font-family: var(--font-display); font-size: 1.75rem; line-height: 1.1; color: var(--porcelain); text-decoration: none; letter-spacing: -.01em; }
+  .hero__number:hover { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .2em; }
+  .hero__messengers { display: none; gap: .25rem 1.25rem; flex-wrap: wrap; }
+  .hero__msg { display: inline-flex; align-items: center; gap: .5rem; min-height: 44px; color: var(--porcelain); text-decoration: underline; text-decoration-color: var(--border-on-stone); text-underline-offset: .3em; }
+  .hero__msg:hover { text-decoration-color: var(--signal); }
+  .hero__caption { display: none; font-size: var(--fs-small); color: var(--muted-on-stone); }
+  .hero__trust { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem var(--gap); margin-top: var(--s3); font-size: var(--fs-small); color: var(--muted-on-stone); }
+  .hero__trust li { display: flex; align-items: center; min-height: 28px; }
+  @media (min-width: 768px) {
+    .hero__trust { display: flex; flex-wrap: wrap; gap: .375rem 0; margin-top: clamp(1.5rem, 3vw, 2.75rem); }
+    .hero__trust li { padding-right: 1rem; margin-right: 1rem; border-right: 1px solid var(--hair-on-stone); }
+    .hero__trust li:last-child { border-right: 0; margin-right: 0; padding-right: 0; }
+  }
+  .hero__trust .link { color: var(--porcelain); white-space: nowrap; }
+  .hero__reviews { grid-column: 1 / -1; }
+
+  @media (min-width: 768px) {
+    .hero__band { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--gap); }
+    .hero__lead { grid-column: 1 / -1; }
+  }
+  @media (min-width: 1024px) {
+    .hero { min-height: min(100svh, 1000px); display: grid; align-content: center; }
+    .hero__title { max-width: none; width: calc(10 / 12 * 100%); }
+    .hero__band { grid-template-columns: 5fr 3fr 4fr; column-gap: calc(var(--gap) * 2); }
+    .hero__lead { grid-column: auto; }
+    .hero__btn { width: auto; justify-self: start; }
+    .hero__number { display: inline-block; }
+    .hero__messengers { display: flex; }
+    .hero__caption { display: block; }
+    .hero__write-toggle { display: none; }
+  }
+
+  /* Motion 1: the rule draws from the left, the action band settles. H1 is never animated (LCP). */
+  @keyframes hero-rule { from { transform: scaleX(0); } }
+  @keyframes hero-band { from { opacity: 0; transform: translateY(8px); } }
+  :global(.js) .hero__rule { animation: hero-rule 700ms var(--ease-out) both; }
+  @media (min-width: 768px) {
+    :global(.js) .hero__band { animation: hero-band 500ms var(--ease-out) 150ms both; }
+  }
+  :global(.js) .hero__rule.is-done, :global(.js) .hero__band.is-done { animation: none; }
+  @media (prefers-reduced-motion: reduce) {
+    :global(.js) .hero__rule, :global(.js) .hero__band { animation: none; }
+  }
+</style>
+
+<script>
+  // Once the opening has played, drop the animation so later re-layouts never replay or freeze it.
+  document.querySelectorAll<HTMLElement>(".hero__rule, .hero__band").forEach((el) => {
+    el.addEventListener("animationend", () => el.classList.add("is-done"), { once: true });
+  });
+</script>

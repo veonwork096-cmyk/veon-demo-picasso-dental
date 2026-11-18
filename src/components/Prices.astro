@@ -1,0 +1,85 @@
+---
+import Icon from "./Icon.astro";
+import FutureLink from "./FutureLink.astro";
+import { clinic, implants, priceRows } from "../data/clinic";
+---
+<section id="prices" class="section field-mineral" data-rec="UX-R005" aria-labelledby="prices-title">
+  <div class="container">
+    <div class="prices__head">
+      <h2 id="prices-title" class="h2">Фінальна ціна — до початку лікування</h2>
+      <p class="prices__note">Ціни орієнтовні. Фінальний бюджет фіксуємо після діагностики, до першого етапу лікування.</p>
+    </div>
+
+    <h3 class="prices__label">Імплантація, ціна за імплант</h3>
+    <ul class="implants">
+      {implants.map((it, i) => (
+        <li class="implant" data-reveal style={`--reveal-delay:${i * 90}ms`}>
+          <span class="implant__brand">{it.brand}</span>
+          <span class="implant__price num">{it.price}<span class="implant__cur"> ₴</span></span>
+        </li>
+      ))}
+    </ul>
+
+    <ul class="allon">
+      <li><span>All-on-4 Osstem, під ключ</span><span class="num allon__sum">286 700 ₴</span></li>
+      <li><span>All-on-6 Straumann, під ключ</span><span class="num allon__sum">453 200 ₴</span></li>
+      <li><span>Кісткова пластика</span><span class="num allon__sum">10 200–32 000 ₴</span></li>
+    </ul>
+
+    <div class="prices__bottom">
+      <h3 class="visually-hidden">Інші послуги</h3>
+      <ul class="sheet-list" id="other-services">
+        {priceRows.map((r) => (
+          <li class="sheet-row"><span class="sheet-row__name">{r.name}</span><span class="sheet-row__price num">{r.price}</span></li>
+        ))}
+      </ul>
+      <div class="prices__cta">
+        <a class="btn btn--primary" href={clinic.phoneMain.href} data-rec="UX-R008"><Icon name="phone" />Записатися на консультацію</a>
+        <p class="small prices__cta-note">Запис за номером <span class="num">{clinic.phoneMain.label}</span></p>
+        <FutureLink>Повний прайс</FutureLink>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .prices__head { display: grid; gap: var(--s3); margin-bottom: clamp(2.5rem, 5vw, 4.5rem); }
+  .prices__note { font-size: var(--fs-body-l); line-height: 1.5; max-width: 38ch; }
+  @media (min-width: 1024px) {
+    .prices__head { grid-template-columns: 7fr 4fr; column-gap: calc(100% / 12); align-items: end; }
+  }
+  .prices__label { font-family: var(--font-body); font-weight: 600; font-size: 1rem; letter-spacing: 0; margin-bottom: var(--s2); }
+  .implants { display: grid; grid-template-columns: minmax(0, 1fr); border-top: 1px solid var(--border); }
+  .implant { display: flex; align-items: baseline; justify-content: space-between; gap: var(--s2); padding-block: var(--s2) var(--s3); border-bottom: 1px solid var(--hair); }
+  .implant__brand { font-weight: 600; font-size: 1.0625rem; }
+  .implant__price { font-family: var(--font-display); font-size: var(--fs-price); line-height: 1; letter-spacing: -.02em; color: var(--stone); }
+  .implant__cur { font-size: .55em; }
+  @media (min-width: 768px) {
+    .implants { grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: var(--gap); border-top: 0; }
+    .implant { flex-direction: column; justify-content: flex-start; gap: var(--s2); padding-block: var(--s3); border-top: 1px solid var(--border); border-bottom: 0; }
+  }
+  .allon { display: grid; gap: .5rem; margin-block: var(--s3) clamp(3rem, 6vw, 5rem); }
+  .allon li { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .25rem 1rem; }
+  .allon__sum { font-weight: 600; }
+  @media (min-width: 1024px) {
+    .allon { grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: var(--gap); }
+    .allon li { flex-direction: column; justify-content: flex-start; }
+    .allon__sum { font-size: 1.25rem; }
+  }
+  .prices__bottom { display: grid; gap: var(--s5); }
+  .sheet-list { display: grid; grid-template-columns: minmax(0, 1fr); column-gap: calc(var(--gap) * 2); }
+  .sheet-row { display: flex; justify-content: space-between; align-items: baseline; gap: var(--s2); padding-block: .875rem; border-bottom: 1px solid var(--hair); }
+  .sheet-row__name { max-width: 34ch; }
+  .sheet-row__price { flex: none; font-weight: 600; text-align: right; }
+  @media (min-width: 768px) { .sheet-list { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .prices__cta { display: grid; justify-items: start; align-content: start; gap: var(--s2); }
+  .prices__cta-note { color: var(--muted); }
+  .prices__cta .btn { white-space: nowrap; }
+  @media (max-width: 767px) { .prices__cta .btn { width: 100%; } }
+  @media (min-width: 1024px) {
+    .prices__bottom { grid-template-columns: 8fr 4fr; column-gap: calc(100% / 12); }
+  }
+  @media (max-width: 767px) {
+    :global(.js) .implant[data-reveal]:not(.is-visible) { transform: translateY(12px); }
+  }
+</style>

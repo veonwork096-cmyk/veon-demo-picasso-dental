@@ -1,0 +1,128 @@
+---
+import Logo from "./Logo.astro";
+import Icon from "./Icon.astro";
+import { clinic, nav, messengers } from "../data/clinic";
+---
+<header class="site-header" data-header data-rec="UX-R010">
+  <div class="site-header__bg" aria-hidden="true"></div>
+  <div class="container site-header__row">
+    <a class="site-header__logo" href="#hero" aria-label="Picasso Dental Clinic — на початок сторінки">
+      <Logo />
+    </a>
+    <nav class="site-header__nav" aria-label="Розділи сторінки">
+      <ul>
+        {nav.map((n) => <li><a href={n.href} data-nav>{n.label}</a></li>)}
+      </ul>
+    </nav>
+    <div class="site-header__actions">
+      <a class="site-header__phone num" href={clinic.phoneMain.href}>{clinic.phoneMain.label}</a>
+      <a class="btn site-header__cta" href="#contacts">Записатися</a>
+      <a class="site-header__icon site-header__call" href={clinic.phoneMain.href} aria-label={`Подзвонити ${clinic.phoneMain.label}`}>
+        <Icon name="phone" size={22} />
+      </a>
+      <button class="site-header__icon site-header__menu" type="button" popovertarget="mobile-menu" aria-label="Відкрити меню">
+        <Icon name="menu" size={24} />
+      </button>
+    </div>
+  </div>
+</header>
+
+<div id="mobile-menu" class="mobile-menu field-stone" popover aria-label="Меню">
+  <div class="mobile-menu__top">
+    <span class="mobile-menu__logo"><Logo /></span>
+    <button class="site-header__icon" type="button" popovertarget="mobile-menu" popovertargetaction="hide" aria-label="Закрити меню">
+      <Icon name="close" size={24} />
+    </button>
+  </div>
+  <nav aria-label="Розділи сторінки (мобільне меню)">
+    <ul class="mobile-menu__list">
+      {nav.map((n) => <li><a href={n.href} data-close-menu>{n.label}</a></li>)}
+    </ul>
+  </nav>
+  <div class="mobile-menu__channels">
+    <a class="mobile-menu__phone num" href={clinic.phoneMain.href}>{clinic.phoneMain.label}</a>
+    <a class="link num" href={clinic.phoneSecond.href}>{clinic.phoneSecond.label}</a>
+    <ul class="chips">
+      {messengers.map((m) => <li><a class="chip" href={m.href}><Icon name={m.id} />{m.name}</a></li>)}
+    </ul>
+    <a class="link link-icon" href={`mailto:${clinic.email}`}><Icon name="mail" />{clinic.email}</a>
+  </div>
+</div>
+
+<style>
+  .site-header {
+    position: fixed; inset: 0 0 auto 0; z-index: 50; height: var(--header-h);
+    color: var(--graphite); --cta-bg: var(--primary); --cta-fg: var(--on-primary); --cta-hover: var(--primary-hover); --active: var(--primary);
+  }
+  .site-header__bg { position: absolute; inset: 0; background: var(--porcelain); border-bottom: 1px solid var(--hair); transition: opacity 240ms var(--ease-out); }
+  :global(.js) .site-header:not(.is-solid) { color: var(--porcelain); --cta-bg: var(--porcelain); --cta-fg: var(--stone); --cta-hover: var(--on-primary); --active: var(--signal); }
+  :global(.js) .site-header:not(.is-solid) .site-header__bg { opacity: 0; }
+  :global(.js) .site-header:not(.is-solid) :focus-visible { outline-color: var(--signal); }
+  .site-header__row { position: relative; height: 100%; display: flex; align-items: center; justify-content: space-between; gap: var(--s4); }
+  .site-header__logo { display: block; flex: none; color: inherit; transition: color 240ms var(--ease-out); }
+  .site-header__logo :global(.logo) { width: 58px; height: auto; }
+  .site-header__nav { display: none; margin-inline: auto; }
+  .site-header__nav ul { display: flex; gap: clamp(1rem, 2vw, 2rem); }
+  .site-header__nav a { position: relative; display: inline-flex; align-items: center; min-height: 44px; color: inherit; text-decoration: none; font-size: .9375rem; }
+  .site-header__nav a::after { content: ""; position: absolute; left: 0; right: 0; bottom: 8px; height: 2px; background: var(--active); transform: scaleX(0); transform-origin: left; transition: transform 200ms var(--ease-out); }
+  .site-header__nav a:hover::after, .site-header__nav a.is-active::after { transform: scaleX(1); }
+  .site-header__actions { display: flex; align-items: center; gap: var(--s3); }
+  .site-header__phone { display: none; color: inherit; text-decoration: none; font-weight: 600; }
+  .site-header__phone:hover { text-decoration: underline; text-underline-offset: .22em; }
+  .site-header__cta { display: none; background: var(--cta-bg); color: var(--cta-fg); --btn-hover: var(--cta-hover); min-height: 44px; }
+  .site-header__icon {
+    display: inline-grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 1.5px solid currentColor; border-radius: var(--radius);
+    background: none; color: inherit; cursor: pointer; transition: transform 120ms var(--ease-out);
+  }
+  .site-header__icon:active { transform: scale(.96); }
+  .site-header__actions { gap: var(--s1); }
+  @media (min-width: 1100px) {
+    .site-header__nav { display: block; }
+    .site-header__cta { display: inline-flex; }
+    .site-header__icon { display: none; }
+    .site-header__actions { gap: var(--s3); }
+  }
+  @media (min-width: 1280px) { .site-header__phone { display: inline; } }
+
+  .mobile-menu { inset: 0; width: 100%; max-width: none; height: 100dvh; max-height: none; margin: 0; padding: 0 var(--gutter) var(--s4); border: 0; overflow-y: auto; }
+  .mobile-menu:popover-open { display: flex; flex-direction: column; }
+  .mobile-menu::backdrop { background: var(--stone); }
+  .mobile-menu__top { display: flex; align-items: center; justify-content: space-between; height: var(--header-h); flex: none; }
+  .mobile-menu__logo :global(.logo) { width: 52px; }
+  .mobile-menu__list { display: grid; gap: .25rem; padding-block: var(--s3) var(--s4); border-bottom: 1px solid var(--hair-on-stone); }
+  .mobile-menu__list a { display: block; padding-block: .375rem; font-family: var(--font-display); font-size: 2rem; line-height: 1.15; letter-spacing: -.02em; color: var(--porcelain); text-decoration: none; }
+  .mobile-menu__channels { display: grid; justify-items: start; gap: var(--s2); padding-top: var(--s4); }
+  .mobile-menu__phone { font-family: var(--font-display); font-size: 1.75rem; color: var(--porcelain); text-decoration: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .site-header__bg, .site-header__logo, .site-header__nav a::after { transition: none; }
+  }
+</style>
+
+<script>
+  const header = document.querySelector<HTMLElement>("[data-header]");
+  const hero = document.getElementById("hero");
+  if (header && hero && "IntersectionObserver" in window) {
+    new IntersectionObserver(([e]) => {
+      header.classList.toggle("is-solid", !e.isIntersecting);
+      document.documentElement.classList.toggle("past-hero", !e.isIntersecting);
+    }, { rootMargin: `-${header.offsetHeight}px 0px 0px 0px`, threshold: 0 }).observe(hero);
+  }
+  // Active section in the nav
+  const links = [...document.querySelectorAll<HTMLAnchorElement>("[data-nav]")];
+  const map = new Map(links.map((a) => [a.getAttribute("href")!.slice(1), a]));
+  if ("IntersectionObserver" in window) {
+    const spy = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        const a = map.get(e.target.id);
+        if (a && e.isIntersecting) {
+          links.forEach((l) => { l.classList.remove("is-active"); l.removeAttribute("aria-current"); });
+          a.classList.add("is-active"); a.setAttribute("aria-current", "true");
+        }
+      }
+    }, { rootMargin: "-45% 0px -50% 0px" });
+    map.forEach((_, id) => { const s = document.getElementById(id); if (s) spy.observe(s); });
+  }
+  // Close the mobile menu after choosing a section
+  const menu = document.getElementById("mobile-menu");
+  menu?.querySelectorAll("[data-close-menu]").forEach((a) => a.addEventListener("click", () => menu.hidePopover?.()));
+</script>

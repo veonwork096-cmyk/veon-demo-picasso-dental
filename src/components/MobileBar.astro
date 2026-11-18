@@ -1,0 +1,54 @@
+---
+import Icon from "./Icon.astro";
+import { clinic, messengers } from "../data/clinic";
+---
+<div class="mbar field-stone" data-rec="UX-R001">
+  <a class="mbar__half mbar__call" href={clinic.phoneMain.href}><Icon name="phone" />Подзвонити</a>
+  <button class="mbar__half mbar__write" type="button" popovertarget="write-sheet"><Icon name="chat" />Написати</button>
+</div>
+
+<div id="write-sheet" class="sheet field-porcelain" popover aria-labelledby="write-sheet-title">
+  <div class="sheet__head">
+    <p id="write-sheet-title" class="sheet__title">Написати в месенджер</p>
+    <button class="sheet__close" type="button" popovertarget="write-sheet" popovertargetaction="hide" aria-label="Закрити">
+      <Icon name="close" size={22} />
+    </button>
+  </div>
+  <p class="small sheet__note">Один номер для запису і месенджерів: <span class="num">{clinic.phoneMain.label}</span></p>
+  <ul class="sheet__list">
+    {messengers.map((m) => <li><a class="btn btn--outline sheet__btn" href={m.href}><Icon name={m.id} />{m.name}</a></li>)}
+  </ul>
+</div>
+
+<style>
+  .mbar {
+    position: fixed; inset: auto 0 0 0; z-index: 40; display: grid; grid-template-columns: 1fr 1fr;
+    padding-bottom: env(safe-area-inset-bottom); box-shadow: var(--shadow);
+    transition: transform 280ms var(--ease-out);
+  }
+  :global(.js) .mbar { transform: translateY(100%); }
+  :global(.js.past-hero) .mbar { transform: none; }
+  .mbar__half {
+    display: flex; align-items: center; justify-content: center; gap: .5rem; height: var(--bar-h); border: 0; border-radius: 0;
+    font: 600 1rem/1 var(--font-body); text-decoration: none; cursor: pointer;
+  }
+  .mbar__call { background: var(--porcelain); color: var(--stone); }
+  .mbar__write { background: var(--stone); color: var(--porcelain); }
+  .mbar__half:active { opacity: .9; }
+  .mbar__write:focus-visible, .mbar__call:focus-visible { outline-offset: -4px; }
+  .mbar__call:focus-visible { outline-color: var(--focus-light); }
+  @media (min-width: 768px) { .mbar { display: none; } }
+
+  .sheet {
+    inset: auto 0 0 0; width: 100%; max-width: 560px; margin: 0 auto; padding: var(--s3) var(--gutter) calc(var(--s3) + env(safe-area-inset-bottom));
+    border: 0; border-radius: var(--radius) var(--radius) 0 0; box-shadow: var(--shadow);
+  }
+  .sheet::backdrop { background: var(--stone); opacity: .55; }
+  .sheet__head { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+  .sheet__title { font-family: var(--font-display); font-size: 1.5rem; line-height: 1.15; }
+  .sheet__close { display: grid; place-items: center; width: 44px; height: 44px; border: 1.5px solid var(--border); border-radius: var(--radius); background: none; color: var(--graphite); cursor: pointer; }
+  .sheet__note { margin-block: .5rem var(--s3); color: var(--muted); }
+  .sheet__list { display: grid; gap: .5rem; }
+  .sheet__btn { width: 100%; justify-content: flex-start; }
+  @media (prefers-reduced-motion: reduce) { .mbar { transition: none; } }
+</style>

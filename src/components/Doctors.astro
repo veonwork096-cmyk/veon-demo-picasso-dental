@@ -1,0 +1,99 @@
+---
+import { Image } from "astro:assets";
+import FutureLink from "./FutureLink.astro";
+import andrii from "../assets/doctors/dr-stetsyk-andrii.jpg";
+import mariia from "../assets/doctors/dr-stetsyk-mariia.jpg";
+import shturmak from "../assets/doctors/dr-shturmak.jpg";
+import chup from "../assets/doctors/dr-chup.jpg";
+
+// REQ-F004, REQ-F005; roles and directions as written on the client's «Про нас» page.
+const team = [
+  { name: "Марія Стецик", role: "Стоматолог-ортопед, CEO клініки", years: "Понад 9 років практики", areas: "Протезування, керамічні реставрації, естетичне відновлення зубів", photo: mariia },
+  { name: "Віталій Штурмак", role: "Лікар-стоматолог, ортопед", years: "Понад 13 років практики", areas: "Керамічні реставрації, конструкції на імплантах, гігієна", photo: shturmak },
+  { name: "Артем Чуп", role: "Лікар-стоматолог, ендодонтист", years: "Понад 6 років практики", areas: "Лікування кореневих каналів, художні реставрації", photo: chup },
+  { name: "Богдан Хлопонін", role: "Лікар-стоматолог, ортодонт", years: "Понад 10 років практики", areas: "Брекети, елайнери, трейнери", photo: null },
+];
+---
+<section id="doctors" class="doctors field-stone" aria-labelledby="doctors-title">
+  <div class="container">
+    <h2 id="doctors-title" class="h2 doctors__title">Лікарі Picasso</h2>
+    <div class="doctors__lead grid">
+      <div class="doctors__portrait">
+        <Image src={andrii} alt="Андрій Стецик, головний лікар Picasso Dental Clinic" widths={[480, 720, 960, 1200]} sizes="(min-width: 1024px) 42vw, 100vw" width={1200} height={1500} fit="cover" position="right" loading="lazy" decoding="async" />
+      </div>
+      <div class="doctors__info">
+        <div class="doctors__chief">
+          <h3 class="doctors__name">Андрій Стецик</h3>
+          <p class="doctors__role">Головний лікар. Стоматолог-ортопед і хірург-імплантолог, понад 13 років практики.</p>
+          <dl class="facts">
+            <div><dt>Освіта</dt><dd>Івано-Франківський НМУ, інтернатура УМСА, клінічна ординатура УжНУ</dd></div>
+            <div><dt>Викладання</dt><dd>Кафедра ортопедичної стоматології УжНУ</dd></div>
+            <div><dt>Навчання</dt><dd class="num">Понад 120 заходів підвищення кваліфікації за 5 років</dd></div>
+            <div><dt>Публікації</dt><dd class="num">20+ наукових публікацій</dd></div>
+          </dl>
+          <p class="doctors__areas"><span class="doctors__areas-label">Напрями:</span> вініри, імплантація, <span class="nowrap">All-on-4</span> і <span class="nowrap">All-on-6</span>, кісткова пластика, синус-ліфт, цифрова стоматологія.</p>
+          <FutureLink>Про лікаря</FutureLink>
+        </div>
+      </div>
+    </div>
+
+    <ul class="team" aria-label="Лікарі клініки">
+      {team.map((d) => (
+        <li class:list={["doc", { "doc--text": !d.photo }]}>
+          {d.photo ? (
+            <Image class="doc__photo" src={d.photo} alt={`${d.name}, ${d.role.toLowerCase()}`} widths={[320, 480, 640]} sizes="(min-width: 1024px) 22vw, 70vw" width={640} height={800} fit="cover" position="top" loading="lazy" decoding="async" />
+          ) : (
+            <p class="doc__lead">Ортодонтія для дорослих: брекети, елайнери, трейнери</p>
+          )}
+          <div class="doc__text">
+            <h3 class="doc__name">{d.name}</h3>
+            <p class="doc__role">{d.role}</p>
+            <p class="doc__years">{d.years}</p>
+            {d.photo && <p class="doc__areas">{d.areas}</p>}
+          </div>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .doctors { padding-top: var(--section-y); padding-bottom: var(--section-y); }
+  .doctors__lead { align-items: end; row-gap: var(--s4); margin-bottom: clamp(3rem, 6vw, 6.5rem); border-bottom: 1px solid var(--hair-on-stone); }
+  .doctors__title { margin-bottom: clamp(2rem, 4vw, 3.5rem); }
+  .doctors__portrait { grid-column: 1 / -1; }
+  .doctors__portrait :global(img) { width: 100%; height: auto; aspect-ratio: 1 / 1; object-fit: cover; object-position: right top; }
+  .doctors__info { grid-column: 1 / -1; display: grid; gap: var(--s4); padding-bottom: var(--s5); }
+  @media (min-width: 768px) {
+    .doctors__portrait { grid-column: 1 / span 4; }
+    .doctors__portrait :global(img) { aspect-ratio: 4 / 5; object-position: right center; }
+    .doctors__info { grid-column: 5 / -1; }
+  }
+  @media (min-width: 1024px) {
+    .doctors__portrait { grid-column: 1 / span 5; }
+    .doctors__info { grid-column: 7 / -1; }
+  }
+  .doctors__chief { display: grid; gap: var(--s3); justify-items: start; }
+  .doctors__name { font-size: clamp(2rem, 1.6rem + 1.6vw, 3rem); }
+  .doctors__role { font-size: var(--fs-body-l); line-height: 1.45; max-width: 36ch; }
+  .facts { display: grid; gap: var(--s2); margin: 0; width: 100%; }
+  .facts div { display: grid; gap: .125rem; padding-top: var(--s2); border-top: 1px solid var(--hair-on-stone); }
+  @media (min-width: 640px) { .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--gap); } }
+  .facts dt { font-size: var(--fs-small); color: var(--muted-on-stone); }
+  .facts dd { margin: 0; }
+  .doctors__areas { color: var(--porcelain); max-width: 52ch; }
+  .doctors__areas-label { color: var(--muted-on-stone); }
+
+  .team { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(240px, 72%); gap: var(--gap); overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: var(--s2); margin-inline: calc(var(--gutter) * -1); padding-inline: var(--gutter); scroll-padding-inline: var(--gutter); }
+  @media (min-width: 768px) { .team { grid-auto-columns: minmax(240px, 40%); } }
+  @media (min-width: 1024px) { .team { grid-auto-flow: row; grid-template-columns: repeat(4, minmax(0, 1fr)); overflow: visible; margin-inline: 0; padding-inline: 0; } }
+  .doc { scroll-snap-align: start; display: grid; align-content: start; gap: .375rem; }
+  .doc :global(.doc__photo) { width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; margin-bottom: var(--s2); }
+  .doc__text { display: grid; gap: .375rem; }
+  .doc--text { align-content: space-between; padding-top: var(--s3); border-top: 1px solid var(--border-on-stone); }
+  .doc__lead { font-family: var(--font-display); font-size: clamp(1.5rem, 1.25rem + .9vw, 2.125rem); line-height: 1.15; letter-spacing: -.01em; color: var(--porcelain); max-width: 14ch; text-wrap: balance; }
+  .doc__name { font-size: var(--fs-h3); }
+  .doc__role { color: var(--porcelain); }
+  .doc__years, .doc__areas { font-size: var(--fs-small); color: var(--muted-on-stone); }
+  .team:focus-visible { outline: 3px solid var(--signal); }
+</style>

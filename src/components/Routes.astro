@@ -1,0 +1,102 @@
+---
+import Icon from "./Icon.astro";
+import FutureLink from "./FutureLink.astro";
+import { clinic } from "../data/clinic";
+---
+<section id="routes" class="section field-porcelain" data-rec="UX-R004" aria-labelledby="routes-title">
+  <div class="container">
+    <div class="section-head">
+      <h2 id="routes-title" class="h2">З чим ви прийшли</h2>
+    </div>
+    <ul class="routes grid">
+      <li class="route route--xl">
+        <a class="route__link" href="#prices">
+          <h3 class="route__title">Імплантація</h3>
+          <p class="route__price num"><span class="route__from">від</span> 20 400 ₴</p>
+          <p class="route__text">Osstem, Neodent або Straumann. <span class="nowrap">All-on-4</span> і <span class="nowrap">All-on-6</span> під ключ.</p>
+          <span class="route__cue">Порівняти ціни <Icon name="arrow" class="route__arrow" /></span>
+        </a>
+      </li>
+      <li class="route route--xl">
+        <a class="route__link" href="#cases">
+          <h3 class="route__title">Вініри та естетика</h3>
+          <p class="route__price num">23 000 ₴ <span class="route__from">за одиницю</span></p>
+          <p class="route__text">Керамічні вініри. Подивіться роботи до і після.</p>
+          <span class="route__cue">Дивитися роботи <Icon name="arrow" class="route__arrow" /></span>
+        </a>
+      </li>
+      <li class="route route--pain field-stone">
+        <div class="route__body">
+          <h3 class="route__title">Болить зуб</h3>
+          <p class="route__price num">Консультація 500 ₴</p>
+          <p class="route__text">Зателефонуйте, підберемо найближчий час. {clinic.hoursFull}.</p>
+          <a class="btn btn--light route__btn" href={clinic.phoneMain.href}><Icon name="phone" />Подзвонити</a>
+        </div>
+      </li>
+      <li class="route">
+        <div class="route__body">
+          <h3 class="route__title">Вирівнювання</h3>
+          <p class="route__price num"><span class="route__from">від</span> 159 000 ₴</p>
+          <p class="route__text">Елайнери та брекети.</p>
+          <a class="route__cue route__cue--link" href={clinic.phoneMain.href}><Icon name="phone" />Записатися</a>
+          <FutureLink class="route__future">Про лікування</FutureLink>
+        </div>
+      </li>
+      <li class="route">
+        <a class="route__link" href="#other-services">
+          <h3 class="route__title">Огляд і гігієна</h3>
+          <p class="route__price num"><span class="route__from">від</span> 2 500 ₴</p>
+          <p class="route__text">Професійна гігієна <span class="nowrap">2 500–3 000 ₴</span>.</p>
+          <span class="route__cue">До цін <Icon name="arrow" class="route__arrow" /></span>
+        </a>
+      </li>
+      <li class="route">
+        <a class="route__link" href="#abroad">
+          <h3 class="route__title">З-за кордону</h3>
+          <p class="route__price">Онлайн-консультація безкоштовно</p>
+          <p class="route__text">План і бюджет до приїзду.</p>
+          <span class="route__cue">Як це працює <Icon name="arrow" class="route__arrow" /></span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<style>
+  .routes { row-gap: var(--gap); }
+  .route { grid-column: 1 / -1; position: relative; border: 1px solid var(--hair); border-radius: var(--radius); background: var(--porcelain); }
+  .route--pain { border-color: var(--stone); }
+  @media (min-width: 768px) {
+    .route { grid-column: span 4; }
+    .route--xl { grid-column: span 4; }
+  }
+  @media (min-width: 1024px) {
+    .route { grid-column: span 3; }
+    .route--xl { grid-column: span 6; }
+  }
+  .route__link, .route__body { position: relative; isolation: isolate; display: flex; flex-direction: column; gap: .625rem; height: 100%; padding: var(--s3); color: inherit; text-decoration: none; }
+  .route--xl .route__link { min-height: clamp(220px, 22vw, 300px); padding: clamp(1.5rem, 2.6vw, 2.5rem); }
+  .route__link::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--mineral); opacity: 0; transition: opacity 200ms var(--ease-out); }
+  .route__link:hover::before { opacity: 1; }
+  .route__link:active { transform: scale(.995); }
+  .route__title { font-size: var(--fs-h3); line-height: 1.12; text-wrap: balance; }
+  .route--xl .route__title { font-size: clamp(1.75rem, 1.3rem + 1.6vw, 2.75rem); text-wrap: balance; }
+  .route__price { font-weight: 600; font-size: 1.125rem; line-height: 1.3; color: var(--primary); }
+  .route--xl .route__price { font-size: clamp(1.375rem, 1.2rem + .6vw, 1.75rem); }
+  .route__from { font-weight: 400; }
+  .route__text { color: var(--muted); max-width: 40ch; }
+  .route__cue { display: inline-flex; align-items: center; gap: .5rem; margin-top: auto; padding-top: var(--s2); font-weight: 600; color: var(--primary); }
+  .route__cue :global(.route__arrow) { transition: transform 200ms var(--ease-out); }
+  .route__link:hover :global(.route__arrow) { transform: translateX(4px); }
+  .route__cue--link { align-self: flex-start; min-height: 44px; padding-top: var(--s2); text-decoration: underline; text-underline-offset: .22em; }
+  .route__cue--link + :global(.route__future) { margin-top: 0; padding-top: .25rem; }
+  .route__future { margin-top: auto; padding-top: var(--s2); align-self: flex-start; }
+  .route--pain { background: var(--stone); }
+  .route--pain .route__price { color: var(--signal); }
+  .route--pain .route__text { color: var(--muted-on-stone); }
+  .route__btn { margin-top: auto; align-self: stretch; }
+  @media (prefers-reduced-motion: reduce) {
+    .route__link:active { transform: none; }
+    .route__link:hover :global(.route__arrow) { transform: none; }
+  }
+</style>

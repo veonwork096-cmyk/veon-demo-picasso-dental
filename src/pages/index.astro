@@ -1,0 +1,54 @@
+---
+import Base from "../layouts/Base.astro";
+import Header from "../components/Header.astro";
+import Hero from "../components/Hero.astro";
+import Routes from "../components/Routes.astro";
+import Prices from "../components/Prices.astro";
+import Cases from "../components/Cases.astro";
+import Doctors from "../components/Doctors.astro";
+import Approach from "../components/Approach.astro";
+import Abroad from "../components/Abroad.astro";
+import Contacts from "../components/Contacts.astro";
+import Footer from "../components/Footer.astro";
+import MobileBar from "../components/MobileBar.astro";
+import { clinic } from "../data/clinic";
+
+const title = "Стоматологія Picasso в Ужгороді — імплантація і вініри";
+const description = "Імплантація Osstem, Neodent, Straumann від 20 400 грн, керамічні вініри, All-on-4/6. Цифрова діагностика і фінальний бюджет до початку лікування в Ужгороді.";
+
+// concept §8.8: Dentist without aggregateRating (rating not verified).
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Dentist",
+  name: clinic.name,
+  telephone: "+380972475747",
+  email: clinic.email,
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "вул. Бабʼяка 1Б, ЖК «Crystal», 2 поверх",
+    addressLocality: "Ужгород",
+    postalCode: "88015",
+    addressCountry: "UA",
+  },
+  geo: { "@type": "GeoCoordinates", latitude: clinic.geo.lat, longitude: clinic.geo.lng },
+  openingHours: "Mo-Sa 10:00-20:00",
+  priceRange: "500–453200 UAH",
+  hasMap: clinic.mapsUrl,
+};
+---
+<Base lang="uk" title={title} description={description}>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  <Header slot="header" />
+  <Hero />
+  <Routes />
+  <Prices />
+  <Cases />
+  <Doctors />
+  <Approach />
+  <Abroad />
+  <Contacts />
+  <Fragment slot="footer">
+    <Footer />
+    <MobileBar />
+  </Fragment>
+</Base>

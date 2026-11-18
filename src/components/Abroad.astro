@@ -1,0 +1,45 @@
+---
+import Icon from "./Icon.astro";
+import FutureLink from "./FutureLink.astro";
+// products_services «Онлайн-консультація (відеозв'язок до 30 хв, безкоштовно)», REQ-F006; business_lines «дистанційний план, координатор, документи».
+---
+<section id="abroad" class="section field-mineral" data-rec="UX-R011,S-R007" aria-labelledby="abroad-title">
+  <div class="container abroad grid">
+    <div class="abroad__main">
+      <h2 id="abroad-title" class="h2 abroad__h2">Лікування з-за кордону: онлайн-консультація</h2>
+      <p class="abroad__offer">До 30 хвилин відеозв'язку — безкоштовно.</p>
+      <p class="abroad__lead">Для українців, які живуть у країнах ЄС і планують лікування під час приїзду додому.</p>
+      <button class="btn btn--primary abroad__cta" type="button" popovertarget="write-sheet" data-rec="UX-R008"><Icon name="chat" />Записатися онлайн</button>
+      <p class="small abroad__channels">Telegram, WhatsApp або Viber на номер <span class="num">+380 97 247 57 47</span></p>
+      <p class="small abroad__donate">За бажанням: донат на ЗСУ від 500 ₴.</p>
+    </div>
+    <ul class="abroad__facts">
+      <li><h3 class="abroad__fact-title">План і бюджет</h3><p>Дистанційно, ще до приїзду.</p></li>
+      <li><h3 class="abroad__fact-title">Координатор</h3><p>Допомагає організувати візит.</p></li>
+      <li><h3 class="abroad__fact-title">Документи</h3><p>Підготовка документів щодо лікування.</p></li>
+      <li class="abroad__future"><FutureLink>Сторінка для пацієнтів з ЄС</FutureLink></li>
+    </ul>
+  </div>
+</section>
+
+<style>
+  .abroad { row-gap: var(--s5); align-items: start; }
+  .abroad__main { grid-column: 1 / -1; display: grid; gap: var(--s3); justify-items: start; }
+  .abroad__facts { grid-column: 1 / -1; display: grid; gap: 0; }
+  @media (min-width: 1024px) {
+    .abroad__main { grid-column: 1 / span 7; }
+    .abroad__facts { grid-column: 9 / -1; padding-top: .5rem; }
+  }
+  .abroad__h2 { max-width: 17ch; }
+  .abroad__offer { font-weight: 600; font-size: clamp(1.25rem, 1.1rem + .6vw, 1.625rem); line-height: 1.35; color: var(--primary); }
+  .abroad__lead { font-size: var(--fs-body-l); line-height: 1.5; max-width: 46ch; }
+  .abroad__cta { margin-top: var(--s1); }
+  @media (max-width: 767px) { .abroad__cta { width: 100%; } }
+  .abroad__channels { color: var(--muted); margin-top: -.75rem; }
+  .abroad__donate { color: var(--muted); }
+  .abroad__facts li { display: grid; gap: .25rem; padding-block: var(--s2); border-top: 1px solid var(--hair); }
+  .abroad__facts li:first-child { border-top: 1px solid var(--border); }
+  .abroad__fact-title { font-size: var(--fs-h3); }
+  .abroad__facts p { color: var(--muted); }
+  .abroad__future { padding-top: var(--s3); }
+</style>

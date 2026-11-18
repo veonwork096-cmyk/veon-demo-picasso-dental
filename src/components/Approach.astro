@@ -1,0 +1,59 @@
+---
+import { Image } from "astro:assets";
+import microscope from "../assets/clinic/microscope.webp";
+import reception from "../assets/clinic/reception-wide.jpg";
+// REQ-F014 (equipment), REQ-F006 (consultation with CT analysis), slogan «Прозорий бюджет».
+const steps = [
+  { title: "Діагностика", text: "Цифрове сканування, 3D-знімки та реєстрація прикусу і руху щелепи на Modjaw 4D Motion." },
+  { title: "План і бюджет", text: "Головний лікар складає план лікування з аналізом КТ, імплантацію планують у 3D. Фінальну ціну ви знаєте до початку лікування." },
+  { title: "Лікування", text: "Ендолікування під операційним мікроскопом, імплантація за 3D-планом, керамічні реставрації." },
+  { title: "Результат", text: "Відновлені естетика і функція усмішки." },
+];
+---
+<section id="approach" class="section field-porcelain" aria-labelledby="approach-title">
+  <div class="container">
+    <figure class="room">
+      <Image src={reception} alt="Ресепшн Picasso Dental Clinic: стійка з блакитного мармуру, світлий коридор до кабінетів" widths={[640, 960, 1324]} sizes="(min-width: 1300px) 1240px, calc(100vw - 2 * clamp(20px, 5vw, 80px))" loading="lazy" decoding="async" />
+      <figcaption class="small room__caption">Ресепшн клініки, 2 поверх ЖК «Crystal»</figcaption>
+    </figure>
+    <h2 id="approach-title" class="h2 approach__title">Діагностика → план → лікування → результат</h2>
+    <div class="approach grid">
+      <div class="approach__media">
+        <Image src={microscope} alt="Лікарі Picasso лікують зуб під операційним мікроскопом" widths={[480, 720, 960, 1280]} sizes="(min-width: 1024px) 42vw, 100vw" loading="lazy" decoding="async" />
+      </div>
+      <div class="steps-wrap">
+      <ol class="steps">
+        {steps.map((s) => (
+          <li class="step">
+            <h3 class="step__title">{s.title}</h3>
+            <p class="step__text">{s.text}</p>
+          </li>
+        ))}
+      </ol>
+      <p class="step--link"><a class="link" href="#cases">Подивитися роботи до і після</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .room { margin: 0 0 var(--section-y); display: grid; gap: .75rem; }
+  .room :global(img) { width: 100%; height: auto; }
+  .room__caption { color: var(--muted); }
+  .approach__title { max-width: 18ch; margin-bottom: clamp(2.5rem, 5vw, 4.5rem); }
+  .approach { align-items: start; row-gap: var(--s4); }
+  .approach__media { grid-column: 1 / -1; }
+  .approach__media :global(img) { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; object-position: 40% center; }
+  .steps-wrap { grid-column: 1 / -1; }
+  .steps { display: grid; gap: 0; }
+  @media (min-width: 1024px) {
+    .approach__media { grid-column: 1 / span 5; position: sticky; top: calc(var(--header-h) + var(--s3)); }
+    .approach__media :global(img) { aspect-ratio: 4 / 5; }
+    .steps-wrap { grid-column: 7 / -1; }
+  }
+  .step { display: grid; gap: .5rem; padding-block: var(--s3); border-top: 1px solid var(--hair); }
+  .step:first-child { border-top: 0; padding-top: 0; }
+  .step__title { font-size: var(--fs-h3); }
+  .step__text { font-size: var(--fs-body-l); line-height: 1.5; color: var(--graphite); max-width: 46ch; }
+  .step--link { padding-top: var(--s3); border-top: 1px solid var(--hair); font-weight: 600; }
+</style>

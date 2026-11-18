@@ -1,0 +1,191 @@
+---
+import { Image } from "astro:assets";
+import Icon from "./Icon.astro";
+import FutureLink from "./FutureLink.astro";
+
+// REQ-F012: 8 cases «до/після» (4 veneers, 4 implantation), no descriptions — caption is the type of work only.
+const files = import.meta.glob<{ default: ImageMetadata }>("../assets/cases/*.webp", { eager: true });
+const img = (name: string) => files[`../assets/cases/${name}.webp`].default;
+type SetId = "veneers" | "implantation";
+const sets: { id: SetId; label: string; caption: string }[] = [
+  { id: "veneers", label: "Вініри", caption: "Керамічні вініри" },
+  { id: "implantation", label: "Імплантація", caption: "Імплантація" },
+];
+const cases = sets.flatMap((s) =>
+  [1, 2, 3, 4].map((n) => ({ set: s.id, n, caption: s.caption, before: img(`${s.id}-before-${n}`), after: img(`${s.id}-after-${n}`) })),
+);
+const stageSizes = "(min-width: 1024px) 66vw, 100vw";
+---
+<section id="cases" class="section field-porcelain" data-rec="UX-R007,S-R008" aria-labelledby="cases-title">
+  <div class="container">
+    <div class="cases__head">
+      <h2 id="cases-title" class="h2">Вініри та імплантація: до і після</h2>
+      <div class="cases__tabs" role="tablist" aria-label="Тип роботи">
+        {sets.map((s, i) => (
+          <button class="cases__tab" type="button" role="tab" id={`tab-${s.id}`} aria-selected={i === 0 ? "true" : "false"} aria-controls="cases-stage" data-set={s.id}>{s.label}</button>
+        ))}
+      </div>
+    </div>
+
+    <div class="cases__body">
+      <div class="cases__stage" id="cases-stage" role="tabpanel" aria-labelledby="tab-veneers">
+        {cases.map((c, i) => (
+          <figure class:list={["case", { "is-active": i === 0 }]} data-set={c.set} data-n={c.n}>
+            <div class="compare" style="--pos: 50%">
+              <Image class="compare__img" src={c.after} alt={`${c.caption}, робота ${c.n}: після лікування`} widths={[640, 960, 1276]} sizes={stageSizes} loading="lazy" decoding="async" />
+              <div class="compare__before">
+                <Image class="compare__img" src={c.before} alt={`${c.caption}, робота ${c.n}: до лікування`} widths={[640, 960, 1276]} sizes={stageSizes} loading="lazy" decoding="async" />
+              </div>
+              <div class="compare__handle" aria-hidden="true"><span class="compare__knob"></span></div>
+              <span class="compare__tag compare__tag--before" aria-hidden="true">До</span>
+              <span class="compare__tag compare__tag--after" aria-hidden="true">Після</span>
+              <input class="compare__range" type="range" min="0" max="100" value="50" step="1" aria-label={`Порівняти до і після: ${c.caption.toLowerCase()}, робота ${c.n}`} />
+            </div>
+            <figcaption class="case__caption">{c.caption}<span class="case__count num">робота {c.n} з 4</span></figcaption>
+          </figure>
+        ))}
+      </div>
+
+      <aside class="cases__side">
+        <ul class="thumbs" aria-label="Обрати роботу">
+          {cases.map((c, i) => (
+            <li class="thumb" data-set={c.set}>
+              <button class="thumb__btn" type="button" data-index={i} aria-pressed={i === 0 ? "true" : "false"} aria-label={`${c.caption}, робота ${c.n}`}>
+                <Image src={c.after} alt="" width={320} loading="lazy" decoding="async" />
+              </button>
+            </li>
+          ))}
+        </ul>
+        <div class="cases__cta">
+          <p class="cases__hint">Потягніть повзунок, щоб порівняти.</p>
+          <button class="btn btn--primary" type="button" popovertarget="write-sheet" data-rec="UX-R008"><Icon name="chat" />Написати лікарю</button>
+          <FutureLink>Усі роботи</FutureLink>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cases__head { display: grid; gap: var(--s3); align-items: end; margin-bottom: clamp(2rem, 4vw, 3.5rem); }
+  @media (min-width: 1024px) { .cases__head { grid-template-columns: 8fr 4fr; column-gap: var(--gap); } }
+  .cases__tabs { display: none; justify-self: start; border: 1.5px solid var(--primary); border-radius: var(--radius); }
+  :global(.js) .cases__tabs { display: inline-flex; }
+  .cases__tab {
+    position: relative; isolation: isolate; min-height: 44px; padding: 0 1.25rem; border: 0; background: transparent; color: var(--primary);
+    font: 600 1rem/1 var(--font-body); cursor: pointer;
+  }
+  .cases__tab::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--primary); opacity: 0; transition: opacity 200ms var(--ease-out); }
+  .cases__tab:hover::before { opacity: .12; }
+  .cases__tab[aria-selected="true"] { color: var(--on-primary); }
+  .cases__tab[aria-selected="true"]::before { opacity: 1; }
+
+  .cases__body { display: grid; gap: var(--s4); }
+  @media (min-width: 1024px) { .cases__body { grid-template-columns: 8fr 4fr; column-gap: var(--gap); align-items: start; } }
+  .cases__stage { display: grid; gap: var(--s4); min-width: 0; }
+  :global(.js) .case:not(.is-active) { display: none; }
+  :global(.js) .case.is-active { animation: case-in 240ms var(--ease-out); }
+  @keyframes case-in { from { opacity: 0; } }
+  .case { margin: 0; }
+
+  .compare { position: relative; overflow: hidden; aspect-ratio: 1276 / 648; background: var(--stone); touch-action: pan-y; }
+  .compare:has(.compare__range:focus-visible) { outline: 3px solid var(--focus-light); outline-offset: 3px; }
+  .compare :global(.compare__img) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .compare__before { position: absolute; inset: 0; clip-path: inset(0 calc(100% - var(--pos)) 0 0); }
+  .compare__handle { position: absolute; inset: 0; pointer-events: none; transform: translateX(var(--pos)); }
+  .compare__handle::before { content: ""; position: absolute; top: 0; bottom: 0; left: -1px; width: 2px; background: var(--porcelain); }
+  .compare__knob { position: absolute; top: 50%; left: 0; width: 44px; height: 44px; transform: translate(-50%, -50%); border-radius: 50%; background: var(--porcelain); box-shadow: inset 0 0 0 2px var(--stone); }
+  .compare__knob::before, .compare__knob::after { content: ""; position: absolute; top: 50%; width: 0; height: 0; transform: translateY(-50%); border: 5px solid transparent; }
+  .compare__knob::before { left: 9px; border-right-color: var(--stone); }
+  .compare__knob::after { right: 9px; border-left-color: var(--stone); }
+  .compare__tag { position: absolute; bottom: 12px; padding: .25rem .625rem; font-size: var(--fs-small); font-weight: 600; background: var(--stone); color: var(--porcelain); border-radius: var(--radius); pointer-events: none; }
+  .compare__tag--before { left: 12px; }
+  .compare__tag--after { right: 12px; }
+  .compare__range { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: ew-resize; }
+  .case__caption { display: flex; flex-wrap: wrap; align-items: baseline; gap: .25rem 1rem; margin-top: var(--s2); font-family: var(--font-display); font-size: var(--fs-h3); line-height: 1.2; }
+  .case__count { font-family: var(--font-body); font-size: var(--fs-small); color: var(--muted); }
+
+  .cases__side { display: grid; gap: var(--s4); align-content: start; min-width: 0; }
+  .thumbs { display: none; }
+  :global(.js) .thumbs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .5rem; }
+  @media (min-width: 1024px) { :global(.js) .thumbs { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s2); } }
+  :global(.js) .thumb.is-hidden { display: none; }
+  :global(.js) .thumb:not(.is-hidden) { animation: case-in 240ms var(--ease-out) both; animation-delay: calc(var(--i, 0) * 30ms); }
+  .thumb__btn { display: block; width: 100%; padding: 0; border: 0; background: var(--stone); cursor: pointer; aspect-ratio: 4 / 3; overflow: hidden; position: relative; }
+  .thumb__btn :global(img) { width: 100%; height: 100%; object-fit: cover; opacity: .72; transition: opacity 200ms var(--ease-out); }
+  .thumb__btn:hover :global(img), .thumb__btn[aria-pressed="true"] :global(img) { opacity: 1; }
+  .thumb__btn::after { content: ""; position: absolute; inset: 0; box-shadow: inset 0 0 0 3px var(--primary); opacity: 0; transition: opacity 200ms var(--ease-out); }
+  .thumb__btn[aria-pressed="true"]::after { opacity: 1; }
+  .cases__cta { display: grid; justify-items: start; gap: var(--s2); }
+  .cases__hint { color: var(--muted); max-width: 40ch; }
+  @media (max-width: 767px) { .cases__cta .btn { width: 100%; } }
+  @media (prefers-reduced-motion: reduce) {
+    :global(.js) .case.is-active, :global(.js) .thumb:not(.is-hidden) { animation: none; }
+  }
+</style>
+
+<script>
+  const root = document.getElementById("cases");
+  if (root) {
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const figures = [...root.querySelectorAll<HTMLElement>(".case")];
+    const thumbs = [...root.querySelectorAll<HTMLElement>(".thumb")];
+    const buttons = [...root.querySelectorAll<HTMLButtonElement>(".thumb__btn")];
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>(".cases__tab")];
+    const stage = root.querySelector<HTMLElement>(".cases__stage")!;
+
+    // Slider: the range input drives --pos (keyboard ← → and touch drag come with the native control).
+    root.querySelectorAll<HTMLElement>(".compare").forEach((box) => {
+      const range = box.querySelector<HTMLInputElement>(".compare__range")!;
+      range.addEventListener("input", () => box.style.setProperty("--pos", `${range.value}%`));
+    });
+
+    const show = (index: number) => {
+      figures.forEach((f, i) => f.classList.toggle("is-active", i === index));
+      buttons.forEach((b, i) => b.setAttribute("aria-pressed", String(i === index)));
+    };
+    const showSet = (set: string) => {
+      tabs.forEach((t) => t.setAttribute("aria-selected", String(t.dataset.set === set)));
+      stage.setAttribute("aria-labelledby", `tab-${set}`);
+      let k = 0;
+      thumbs.forEach((t) => {
+        const on = t.dataset.set === set;
+        t.classList.toggle("is-hidden", !on);
+        if (on) t.style.setProperty("--i", String(k++));
+      });
+      const first = figures.findIndex((f) => f.dataset.set === set);
+      show(first);
+    };
+    buttons.forEach((b) => b.addEventListener("click", () => show(Number(b.dataset.index))));
+    tabs.forEach((t, i) => {
+      t.addEventListener("click", () => showSet(t.dataset.set!));
+      t.addEventListener("keydown", (e) => {
+        if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+        const next = tabs[(i + (e.key === "ArrowRight" ? 1 : tabs.length - 1)) % tabs.length];
+        next.focus(); next.click();
+      });
+    });
+    showSet("veneers");
+
+    // Motion 3: one hint sweep of the handle 50 → 38 → 50 the first time the stage is seen.
+    if (!reduce && "IntersectionObserver" in window) {
+      const io = new IntersectionObserver(([e]) => {
+        if (!e.isIntersecting) return;
+        io.disconnect();
+        const box = root.querySelector<HTMLElement>(".case.is-active .compare");
+        const range = box?.querySelector<HTMLInputElement>(".compare__range");
+        if (!box || !range) return;
+        const start = performance.now();
+        const ease = (t: number) => 1 - Math.pow(1 - t, 3);
+        const step = (now: number) => {
+          const t = Math.min(1, (now - start) / 800);
+          const v = t < .5 ? 50 - 12 * ease(t * 2) : 38 + 12 * ease((t - .5) * 2);
+          box.style.setProperty("--pos", `${v}%`);
+          if (t < 1) requestAnimationFrame(step); else { box.style.setProperty("--pos", "50%"); range.value = "50"; }
+        };
+        requestAnimationFrame(step);
+      }, { threshold: .5 });
+      io.observe(stage);
+    }
+  }
+</script>

@@ -1,0 +1,117 @@
+---
+import { Image } from "astro:assets";
+import Icon from "./Icon.astro";
+import FutureLink from "./FutureLink.astro";
+import facade from "../assets/clinic/facade.webp";
+import { clinic, messengers } from "../data/clinic";
+const topics = ["Імплантація", "Вініри та естетика", "Болить зуб", "Вирівнювання", "Огляд і гігієна", "Лікування з-за кордону"];
+---
+<section id="contacts" class="section field-stone" aria-labelledby="contacts-title">
+  <div class="container contacts grid">
+    <div class="contacts__main">
+      <h2 id="contacts-title" class="h2">Контакти і запис</h2>
+      <address class="contacts__address">
+        <span class="contacts__street">{clinic.street}</span>
+        <span>{clinic.building}</span>
+        <span class="contacts__city">{clinic.city}</span>
+      </address>
+      <a class="link link-icon contacts__route" href={clinic.routeUrl} target="_blank" rel="noopener"><Icon name="pin" />Маршрут у Google Maps</a>
+      <p class="contacts__hours"><span>{clinic.hours}</span><span class="contacts__off">{clinic.hoursOff}</span></p>
+
+      <div class="contacts__phones">
+        <p class="contacts__label">Запис і месенджери</p>
+        <a class="contacts__phone num" href={clinic.phoneMain.href}>{clinic.phoneMain.label}</a>
+        <a class="btn btn--light contacts__call" href={clinic.phoneMain.href} data-rec="UX-R008"><Icon name="phone" />Подзвонити</a>
+        <ul class="chips" aria-label="Месенджери">
+          {messengers.map((m) => <li><a class="chip" href={m.href}><Icon name={m.id} />{m.name}</a></li>)}
+        </ul>
+        <p class="contacts__second">Другий номер: <a class="link num" href={clinic.phoneSecond.href}>{clinic.phoneSecond.label}</a></p>
+        <p><a class="link link-icon" href={`mailto:${clinic.email}`}><Icon name="mail" />{clinic.email}</a></p>
+      </div>
+    </div>
+
+    <div class="contacts__side">
+      <figure class="contacts__photo">
+        <Image src={facade} alt="Вхід до Picasso Dental Clinic: вивіска PICASSO на фасаді ЖК «Crystal»" widths={[480, 800, 1200]} sizes="(min-width: 1024px) 40vw, 100vw" loading="lazy" decoding="async" />
+        <figcaption class="small">Вивіска клініки на ЖК «Crystal», вул. Бабʼяка 1Б</figcaption>
+      </figure>
+
+      <div class="request">
+        <h3 class="request__title">Заявка на консультацію</h3>
+        <div class="request__notice" role="note">
+          <p class="request__notice-text">Онлайн-заявка з'явиться в повній версії сайту. Зараз записатися найшвидше телефоном або в месенджері.</p>
+          <div class="request__notice-actions">
+            <a class="btn btn--light" href={clinic.phoneMain.href}><Icon name="phone" /><span class="num">{clinic.phoneMain.label}</span></a>
+            <button class="btn btn--ghost-light" type="button" popovertarget="write-sheet"><Icon name="chat" />Написати</button>
+          </div>
+        </div>
+        <fieldset class="request__preview" disabled aria-describedby="request-preview-note">
+          <legend id="request-preview-note" class="request__preview-label">Так виглядатиме форма заявки</legend>
+          <div class="request__field">
+            <label for="req-name">Ім'я</label>
+            <input id="req-name" name="name" type="text" autocomplete="name" />
+          </div>
+          <div class="request__field">
+            <label for="req-phone">Телефон</label>
+            <input id="req-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" />
+          </div>
+          <div class="request__field">
+            <label for="req-topic">Що турбує <span class="request__opt">(необов'язково)</span></label>
+            <select id="req-topic" name="topic">
+              <option value="">Оберіть</option>
+              {topics.map((t) => <option>{t}</option>)}
+            </select>
+          </div>
+          <FutureLink class="btn request__send" note="Онлайн-заявка з'явиться в повній версії сайту">Надіслати заявку</FutureLink>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .contacts { row-gap: var(--s5); align-items: start; }
+  .contacts__main { grid-column: 1 / -1; display: grid; gap: var(--s3); justify-items: start; }
+  .contacts__side { grid-column: 1 / -1; display: grid; gap: var(--s4); }
+  @media (min-width: 1024px) {
+    .contacts__main { grid-column: 1 / span 6; }
+    .contacts__side { grid-column: 8 / -1; }
+  }
+  .contacts__address { display: grid; font-style: normal; font-family: var(--font-display); font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2.25rem); line-height: 1.2; letter-spacing: -.01em; margin-top: var(--s2); }
+  .contacts__street { font-size: 1.35em; }
+  .contacts__city { color: var(--muted-on-stone); }
+  .contacts__route { color: var(--porcelain); min-height: 44px; }
+  .contacts__hours { display: grid; color: var(--porcelain); }
+  .contacts__off { color: var(--muted-on-stone); }
+  .contacts__phones { display: grid; gap: var(--s2); justify-items: start; width: 100%; padding-top: var(--s3); border-top: 1px solid var(--hair-on-stone); }
+  .contacts__label { font-size: var(--fs-small); color: var(--muted-on-stone); }
+  .contacts__phone { font-family: var(--font-display); font-size: clamp(2rem, 1.6rem + 1.6vw, 3rem); line-height: 1.05; color: var(--porcelain); text-decoration: none; letter-spacing: -.01em; }
+  .contacts__phone:hover { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .15em; }
+  @media (max-width: 767px) { .contacts__call { width: 100%; } }
+  .contacts__second { color: var(--muted-on-stone); }
+  .contacts__second .link { color: var(--porcelain); }
+  .contacts__phones .link-icon { color: var(--porcelain); }
+
+  .contacts__photo { margin: 0; display: grid; gap: .5rem; }
+  .contacts__photo :global(img) { width: 100%; max-width: 670px; height: auto; }
+  .contacts__photo figcaption { color: var(--muted-on-stone); }
+
+  .request { display: grid; gap: var(--s3); padding-top: var(--s3); border-top: 1px solid var(--hair-on-stone); min-width: 0; }
+  .request__title { font-size: var(--fs-h3); line-height: 1.2; }
+  .request__notice { display: grid; gap: var(--s2); padding: var(--s3); border: 1.5px solid var(--signal); border-radius: var(--radius); }
+  .request__notice-text { font-size: var(--fs-body-l); line-height: 1.45; color: var(--porcelain); max-width: 40ch; }
+  .request__notice-actions { display: flex; flex-wrap: wrap; gap: .5rem; }
+  @media (max-width: 767px) { .request__notice-actions .btn { width: 100%; } }
+  .request__preview { display: grid; gap: var(--s2); margin: 0; padding: 0; border: 0; min-width: 0; }
+  .request__preview-label { float: left; width: 100%; padding: 0; margin-bottom: var(--s1); font-size: var(--fs-small); color: var(--muted-on-stone); }
+  .request__field { display: grid; gap: .375rem; }
+  .request__field label { font-size: var(--fs-small); font-weight: 600; color: var(--muted-on-stone); }
+  .request__opt { font-weight: 400; }
+  .request input, .request select {
+    width: 100%; min-height: 48px; padding: 0 1rem; border: 1px dashed var(--border-on-stone); border-radius: var(--radius);
+    background: transparent; color: var(--muted-on-stone); font: 400 1rem/1.3 var(--font-body); cursor: not-allowed; opacity: 1;
+  }
+  .request input:disabled, .request select:disabled { background: transparent; color: var(--muted-on-stone); border-color: var(--border-on-stone); }
+  .request select option { background: var(--stone); color: var(--porcelain); }
+  .request :global(.request__send) { justify-self: start; margin-top: var(--s1); text-decoration: none; background: transparent; color: var(--muted-on-stone); border: 1px dashed var(--border-on-stone); cursor: not-allowed; }
+</style>

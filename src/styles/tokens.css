@@ -1,0 +1,60 @@
+/* Hallmark · shape: stacked typographic hero + mosaic + estimate sheet · genre: modern-minimal · theme: custom · job: book · idea: "Камінь і світло кабінету — і нічого не сховано" · vibe: "спокійний камінь, відкрита ціна, точність" · paper: #F4F5F3 (field #22323C) · accent: #3F5B6F (signal #9FD0DC) · display: Piazzolla · body: Golos Text · hero: типографський H1 на темному камені, лінія, смуга дій з номером і месенджерами · nav: sticky, прозора на камені → порцелянова · footer: продовження каменю з юр. даними · imagery: client photos · signature: три ціни імплантів поруч і лікарі, що виходять з темного каменю · axes: dark-field/roman-serif/cool · posture: committed · contrast: pass · fold: pass · v2.0.0 */
+/* Hallmark · pre-emit critique: P4 H4 E4 S4 R4 V4 · weakest: imagery (reception photo only 670 px wide), shown at its native ratio and size, not stretched */
+/* Client design tokens — only from design/concept.md (veon-concept: colors, fonts; §8.4–8.6). */
+:root {
+  /* Fields */
+  --stone: #22323C;
+  --porcelain: #F4F5F3;
+  --mineral: #E1E7E9;
+  /* Text */
+  --graphite: #3E403D;
+  --muted: #56656E;
+  --muted-on-stone: #A8BCC6;
+  /* Brand + signal */
+  --primary: #3F5B6F;
+  --primary-hover: #2C4556;
+  --on-primary: var(--porcelain);
+  --signal: #9FD0DC;
+  --focus-light: #2C6386;
+  /* Lines */
+  --border: #6F7F88;
+  --border-on-stone: #7D93A0;
+  --hair: #C9D2D6;
+  --hair-on-stone: #3A4C58;
+  --stone-raised: #2B3E4A;
+  --shadow: 0 -8px 24px rgba(16, 26, 32, .18);
+
+  /* Base names used by the demo base */
+  --color-bg: var(--porcelain);
+  --color-text: var(--graphite);
+  --color-accent: var(--focus-light);
+
+  --font-display: "Piazzolla Variable", "Piazzolla", Georgia, serif;
+  --font-body: "Golos Text Variable", "Golos Text", system-ui, sans-serif;
+
+  /* Type scale 390 → 1440 (concept §8.5) */
+  --fs-display: clamp(2.625rem, 1.66rem + 3.96vw, 5.5rem);
+  --fs-h2: clamp(2rem, 1.49rem + 2.1vw, 3.5rem);
+  --fs-price: clamp(2.75rem, 2.15rem + 2.45vw, 4.5rem);
+  --fs-h3: clamp(1.375rem, 1.24rem + .57vw, 1.75rem);
+  --fs-body-l: clamp(1.125rem, 1.08rem + .19vw, 1.25rem);
+  --fs-body: clamp(1rem, .98rem + .1vw, 1.0625rem);
+  --fs-small: .875rem;
+
+  /* Rhythm (multiples of 8) */
+  --s1: .5rem; --s2: 1rem; --s3: 1.5rem; --s4: 2.5rem; --s5: 4rem; --s6: 6.5rem; --s7: 10.5rem;
+  --section-y: clamp(4.5rem, 9vw, 10.5rem);
+  --gutter: clamp(20px, 5vw, 80px);
+  --gap: 24px;
+  --container: 1240px;
+  --space: var(--gutter);
+  --radius: 2px;
+  --header-h: 72px;
+  --bar-h: 56px;
+
+  --ease-out: cubic-bezier(.2, .7, .2, 1);
+  --dur: 600ms;
+}
+@media (max-width: 767px) {
+  :root { --header-h: 64px; --gap: 16px; }
+}
